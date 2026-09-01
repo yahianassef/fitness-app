@@ -5,8 +5,8 @@ bands** — no gym required. Pick your level (Beginner / Intermediate / Advanced
 a complete program with a form video for every exercise, progression ladders that scale
 as you get stronger, and simple progress tracking.
 
-Runs entirely on your machine in development mode — **no build step, no deployment, no
-app-store anything.** Works the same in a desktop browser and in mobile Safari on iOS
+Published as a static PWA on GitHub Pages — **free, always on, no server, no
+subscription.** Works the same in a desktop browser and in mobile Safari on iOS
 (mobile-first responsive design, installable PWA, bottom tab bar, large tap targets).
 
 ### The redesign at a glance
@@ -29,12 +29,55 @@ app-store anything.** Works the same in a desktop browser and in mobile Safari o
 
 ---
 
+## 🌐 Live app (GitHub Pages)
+
+**https://yahianassef.github.io/fitness-app/**
+
+Always on, free forever, nothing to pay and no server to keep running. Open it in
+**Safari** on iPhone → **Share** → **Add to Home Screen** to install it as a full-screen
+app that also works offline.
+
+### How the hosted build works
+
+GitHub Pages only serves static files, so the published app has no backend:
+
+- `tools/export_static.py` bakes the exercise library and programs out of
+  `api/seed_data/` into `docs/data/app-data.json` (125 exercises, 6 programs).
+  Choice lists, `LEVEL_DEFAULTS` and the blurbs are read straight out of
+  `api/models.py` / `api/views.py` with `ast`, so the export cannot drift.
+- `docs/js/api.js` replaces the fetch wrapper with a local implementation of every
+  endpoint. Library data comes from that JSON; your profile and workout log live in the
+  browser's `localStorage`. Every page component is unchanged.
+- `docs/js/router.js` is base-path aware, since project Pages sites live under
+  `/<repo>/`.
+- `404.html` is a copy of the shell so deep links work, and `sw.js` caches everything
+  for offline use.
+
+Rebuild after changing exercises, programs or any frontend file:
+
+```bash
+python tools/build_static.py
+git add docs && git commit -m "rebuild" && git push
+```
+
+Pages redeploys automatically on push to `master`.
+
+### What that trades away
+
+Your log is stored **on the device**, in that browser's storage. It is not synced
+between phone and laptop, and clearing site data erases it. There is no server account:
+"sign in" restores the profile saved on that device, and the password is not checked
+because there is nothing to check it against. For a single-user personal tracker that
+is the point — it is why the app needs no database, no subscription and no uptime.
+
+---
+
 ## Tech stack
 
 | Layer | Choice | Notes |
 |---|---|---|
 | Backend | **Python / Django 5 + Django REST Framework** | REST API, token auth, ORM + migrations, admin site |
-| Database | **SQLite** (Django default) | Zero setup. The ORM/queries are standard — point `DATABASES` at PostgreSQL and it works unchanged. |
+| Database | **SQLite** locally · **`localStorage`** in the published build | The Django ORM is only used for authoring seed data; the hosted app has no database. |
 | Frontend | **Vue 3** (vendored, no build) | ES-module SPA loaded via an import map. `vue.esm-browser.prod.js` is committed under `web/static/web/vendor/`, so it runs fully offline. |
 | Charts | Hand-rolled inline SVG | No chart library. |
 | Video | YouTube embeds via `youtube-nocookie.com` | Click-to-load, so nothing contacts YouTube until the user presses play. |

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#e8632a" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#17140f" media="(prefers-color-scheme: dark)" />
+  <meta name="description" content="A calm, encouraging way back into the gym after time off." />
+  <title>Fitness Comeback</title>
+
+  <base href="/fitness-app/" />
+
+  <!-- iOS "Add to Home Screen" — makes it open full-screen like an installed app -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Comeback" />
+  <link rel="apple-touch-icon" href="/fitness-app/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/fitness-app/icons/icon-192.png" />
+  <link rel="manifest" href="/fitness-app/site.webmanifest" />
+
+  <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+  <link rel="stylesheet" href="/fitness-app/css/styles.css" />
+  <script>window.__FC_BASE__ = "/fitness-app";</script>
+  <script type="importmap">
+  {
+    "imports": {
+      "vue": "/fitness-app/vendor/vue.esm-browser.prod.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <div class="boot">Loading your comeback…</div>
+  </div>
+  <script type="module" src="/fitness-app/js/main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/fitness-app/sw.js').catch(function () {});
+      });
+    }
+  </script>
+</body>
+</html>
