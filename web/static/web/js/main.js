@@ -1,6 +1,7 @@
 import { createApp, h, shallowRef, watch } from 'vue';
 import { store } from './store.js';
 import { route, defineRoutes, resolve, navigate, RouterLink } from './router.js';
+import { theme, initTheme } from './theme.js';
 
 import Landing from './pages/Landing.js';
 import Login from './pages/Login.js';
@@ -11,6 +12,7 @@ import EquipmentIndex from './pages/EquipmentIndex.js';
 import ExerciseList from './pages/ExerciseList.js';
 import ExerciseDetail from './pages/ExerciseDetail.js';
 import Moves from './pages/Moves.js';
+import Gym from './pages/Gym.js';
 import PatternDetail from './pages/PatternDetail.js';
 import Programs from './pages/Programs.js';
 import ProgramDetail from './pages/ProgramDetail.js';
@@ -28,6 +30,7 @@ defineRoutes([
   { path: '/onboarding', component: Onboarding, auth: true },
   { path: '/dashboard', component: Dashboard, auth: true },
   { path: '/moves', component: Moves, public: true },
+  { path: '/gym', component: Gym, public: true },
   { path: '/moves/:pattern', component: PatternDetail, public: true },
   { path: '/equipment', component: EquipmentIndex, public: true },
   { path: '/exercises', component: ExerciseList, public: true },
@@ -71,6 +74,7 @@ watch(() => store.user, syncRoute);
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Home', ico: '🏠', authOnly: true },
   { to: '/moves', label: 'Moves', ico: '🤸' },
+  { to: '/gym', label: 'Gym', ico: '🏋️' },
   { to: '/programs', label: 'Programs', ico: '🗺️' },
   { to: '/log', label: 'Log', ico: '➕', authOnly: true },
   { to: '/progress', label: 'Progress', ico: '📈', authOnly: true },
@@ -94,6 +98,7 @@ const App = {
   },
   computed: {
     store: () => store,
+    theme: () => theme,
     navItems() {
       return NAV_ITEMS.filter((i) => !i.authOnly || store.isAuthed);
     },
@@ -102,6 +107,10 @@ const App = {
     dismissInstallHint() {
       this.showInstallHint = false;
       try { localStorage.setItem('fc_a2hs_dismissed', '1'); } catch { /* ignore */ }
+    },
+    cycleTheme() {
+      theme.cycle();
+      store.flash('Theme: ' + theme.label);
     },
     logout() {
       store.logout();
@@ -123,7 +132,15 @@ const App = {
             this.navItems.map((i) =>
               h(RouterLink, { to: i.to, key: i.to }, { default: () => i.label }))),
           h('div', { class: 'row' }, [
-            h('a', { href: '/connect', class: 'btn ghost sm hide-mobile', title: 'Open on your phone' }, '📱 Phone'),
+            h('button', {
+              class: 'btn ghost sm theme-btn',
+              onClick: this.cycleTheme,
+              title: `Theme: ${theme.label} (tap to change)`,
+              'aria-label': `Theme: ${theme.label}. Tap to change.`,
+            }, [
+              h('span', { class: 'theme-ico', 'aria-hidden': 'true' }, theme.icon),
+              h('span', { class: 'hide-mobile' }, theme.label),
+            ]),
             store.isAuthed
               ? h('button', { class: 'btn ghost sm', onClick: this.logout }, 'Sign out')
               : h(RouterLink, { to: '/login' }, {
@@ -155,6 +172,7 @@ const App = {
   },
 };
 
+initTheme();
 store.bootstrap().then(() => {
   syncRoute();
   createApp(App).mount('#app');

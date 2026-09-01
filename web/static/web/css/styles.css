@@ -45,35 +45,66 @@
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", system-ui, Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* Dark tokens live in a mixin-style block applied by BOTH the system
+   preference and an explicit [data-theme] choice, so a manual toggle can
+   override the OS in either direction. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #06070e;
-    --bg-deep: #04050a;
-    --surface: rgba(22, 26, 44, .58);
-    --surface-solid: #12162a;
-    --surface-2: rgba(255, 255, 255, .055);
-    --surface-3: rgba(255, 255, 255, .10);
-    --border: rgba(255, 255, 255, .085);
-    --border-strong: rgba(255, 255, 255, .16);
-    --text: #eef1fb;
-    --text-soft: #9aa2be;
+  :root:not([data-theme="light"]) {
+  --bg: #06070e;
+  --bg-deep: #04050a;
+  --surface: rgba(22, 26, 44, .58);
+  --surface-solid: #12162a;
+  --surface-2: rgba(255, 255, 255, .055);
+  --surface-3: rgba(255, 255, 255, .10);
+  --border: rgba(255, 255, 255, .085);
+  --border-strong: rgba(255, 255, 255, .16);
+  --text: #eef1fb;
+  --text-soft: #9aa2be;
 
-    --accent: #ff6b35;
-    --accent-2: #ffb03a;
-    --accent-soft: rgba(255, 107, 53, .16);
-    --accent-text: #ffa072;
-    --electric: #8b7cff;
-    --electric-soft: rgba(139, 124, 255, .16);
-    --cyan: #35dcf2;
-    --good: #35d89b;
-    --good-soft: rgba(53, 216, 155, .14);
-    --warn: #ff9d5c;
+  --accent: #ff6b35;
+  --accent-2: #ffb03a;
+  --accent-soft: rgba(255, 107, 53, .16);
+  --accent-text: #ffa072;
+  --electric: #8b7cff;
+  --electric-soft: rgba(139, 124, 255, .16);
+  --cyan: #35dcf2;
+  --good: #35d89b;
+  --good-soft: rgba(53, 216, 155, .14);
+  --warn: #ff9d5c;
 
-    --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 16px 40px -16px rgba(0, 0, 0, .8);
-    --shadow-lift: 0 2px 8px rgba(0, 0, 0, .5), 0 28px 60px -20px rgba(0, 0, 0, .9);
-    --shadow-pop: 0 12px 36px -10px rgba(255, 107, 53, .5);
-    --ring: 0 0 0 3px rgba(255, 107, 53, .4);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 16px 40px -16px rgba(0, 0, 0, .8);
+  --shadow-lift: 0 2px 8px rgba(0, 0, 0, .5), 0 28px 60px -20px rgba(0, 0, 0, .9);
+  --shadow-pop: 0 12px 36px -10px rgba(255, 107, 53, .5);
+  --ring: 0 0 0 3px rgba(255, 107, 53, .4);
   }
+}
+:root[data-theme="dark"] {
+  --bg: #06070e;
+  --bg-deep: #04050a;
+  --surface: rgba(22, 26, 44, .58);
+  --surface-solid: #12162a;
+  --surface-2: rgba(255, 255, 255, .055);
+  --surface-3: rgba(255, 255, 255, .10);
+  --border: rgba(255, 255, 255, .085);
+  --border-strong: rgba(255, 255, 255, .16);
+  --text: #eef1fb;
+  --text-soft: #9aa2be;
+
+  --accent: #ff6b35;
+  --accent-2: #ffb03a;
+  --accent-soft: rgba(255, 107, 53, .16);
+  --accent-text: #ffa072;
+  --electric: #8b7cff;
+  --electric-soft: rgba(139, 124, 255, .16);
+  --cyan: #35dcf2;
+  --good: #35d89b;
+  --good-soft: rgba(53, 216, 155, .14);
+  --warn: #ff9d5c;
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 16px 40px -16px rgba(0, 0, 0, .8);
+  --shadow-lift: 0 2px 8px rgba(0, 0, 0, .5), 0 28px 60px -20px rgba(0, 0, 0, .9);
+  --shadow-pop: 0 12px 36px -10px rgba(255, 107, 53, .5);
+  --ring: 0 0 0 3px rgba(255, 107, 53, .4);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -966,3 +997,73 @@ input:focus, select:focus, textarea:focus {
 .reveal { transition: opacity .7s var(--ease), transform .7s var(--ease); }
 .reveal.armed.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .reveal.armed { opacity: 1; transform: none; } }
+
+/* Keep native controls (scrollbars, date pickers) in the chosen theme. */
+:root[data-theme="dark"] { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+
+/* ============================================================
+   Gym & Equipment tab + theme toggle
+   ============================================================ */
+
+.theme-btn { gap: .4rem; padding-inline: .8rem; }
+.theme-ico { font-size: 1.05rem; line-height: 1; }
+
+/* ---------- equipment accordion ---------- */
+.eq-card {
+  background: var(--surface);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.eq-card.open {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft), var(--shadow-lift);
+}
+
+.eq-head {
+  display: flex; align-items: center; gap: .85rem;
+  width: 100%; padding: .9rem 1rem; min-height: var(--tap);
+  background: none; border: 0; cursor: pointer; text-align: left;
+  font: inherit; color: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .2s var(--ease);
+}
+.eq-head:hover { background: var(--surface-2); }
+.eq-head:active { background: var(--surface-3); }
+
+.eq-ico {
+  flex: 0 0 auto; width: 44px; height: 44px; border-radius: 14px;
+  display: grid; place-items: center; font-size: 1.35rem;
+  background: var(--surface-2); border: 1px solid var(--border);
+}
+.eq-card.open .eq-ico { background: var(--accent-soft); border-color: var(--accent); }
+
+.eq-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .12rem; }
+.eq-name { font-weight: 700; letter-spacing: -.01em; }
+.eq-sub { font-size: .82rem; color: var(--text-soft); line-height: 1.35; }
+.eq-chev { flex: 0 0 auto; color: var(--text-soft); font-size: .9rem; }
+
+.eq-list {
+  padding: 0 .7rem .7rem;
+  display: flex; flex-direction: column; gap: .35rem;
+  animation: eq-open .3s var(--ease) both;
+}
+@keyframes eq-open {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+.eq-cue {
+  display: block; margin-top: .1rem;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 52ch;
+}
+
+/* Full-bleed sections use calc(50% - 50vw); vw counts the scrollbar, so they end
+   up a scrollbar-width wider than the content box and cause a small horizontal
+   scroll. Clip (not hidden) contains it without creating a scroll container,
+   which would break the sticky topbar. */
+html, body { overflow-x: clip; }

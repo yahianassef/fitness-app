@@ -24,7 +24,7 @@ class FitnessApiTests(APITestCase):
         self.assertEqual(me.data["profile"]["display_name"], "Jordan")
 
     def test_library_is_seeded_and_filterable(self):
-        self.assertEqual(len(self.client.get("/api/exercises/").data), 125)
+        self.assertEqual(len(self.client.get("/api/exercises/").data), 208)
         self.assertEqual(len(self.client.get("/api/programs/").data), 6)
         cables = self.client.get("/api/exercises/?equipment=cables").data
         self.assertTrue(cables and all(e["equipment"] == "cables" for e in cables))
@@ -61,7 +61,22 @@ class FitnessApiTests(APITestCase):
 
     def test_equipment_counts_add_up(self):
         eq = self.client.get("/api/equipment/").data
-        self.assertEqual(sum(e["exercise_count"] for e in eq), 125)
+        self.assertEqual(sum(e["exercise_count"] for e in eq), 208)
+
+    def test_gym_equipment_library(self):
+        """Every non-bodyweight/bands category is populated and browsable."""
+        gym = ["dumbbells", "barbells", "kettlebells", "machines", "cables",
+               "medicine_ball", "stability_ball"]
+        rows = self.client.get("/api/exercises/?equipment=" + ",".join(gym)).data
+        self.assertEqual(len(rows), 119)
+        by_type = {}
+        for r in rows:
+            by_type[r["equipment"]] = by_type.get(r["equipment"], 0) + 1
+        # No category may be empty, or its card would open onto nothing.
+        for kind in gym:
+            self.assertGreater(by_type.get(kind, 0), 0, f"{kind} has no exercises")
+        # Every exercise must carry a form video; that is the core promise.
+        self.assertTrue(all(r["video_id"] for r in rows))
 
     def test_fitness_level_defaults(self):
         defaults = self.client.get("/api/level-defaults/").data

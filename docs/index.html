@@ -22,6 +22,18 @@
   <link rel="preconnect" href="https://www.youtube-nocookie.com" />
   <link rel="stylesheet" href="/fitness-app/css/styles.css" />
   <script>window.__FC_BASE__ = "/fitness-app";</script>
+  <script>
+    /* Apply the saved theme before first paint. Doing this from a module would
+       flash the wrong theme on every load, which is worse than no toggle. */
+    (function () {
+      try {
+        var m = localStorage.getItem('fc_theme');
+        if (m === 'dark' || m === 'light') {
+          document.documentElement.setAttribute('data-theme', m);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script type="importmap">
   {
     "imports": {

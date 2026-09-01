@@ -38,6 +38,8 @@ EQUIPMENT_BLURBS = {
     "bands": "Joint-friendly tension you can take anywhere. Ideal for warm-ups and rebuilding.",
     "machines": "Guided paths mean you can push a little without a spotter.",
     "cables": "Constant tension and smooth resistance — kind to rusty joints.",
+    "medicine_ball": "Throw, slam and rotate — power training that is easy on the joints.",
+    "stability_ball": "Adds an instability tax to simple moves, and makes core work brutal.",
 }
 
 

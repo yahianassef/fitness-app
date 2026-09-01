@@ -17,7 +17,14 @@ EQUIPMENT_CHOICES = [
     ("bands", "Resistance Bands"),
     ("machines", "Machines"),
     ("cables", "Cables"),
+    ("medicine_ball", "Medicine Ball"),
+    ("stability_ball", "Stability Ball"),
 ]
+
+# The two families the app splits its browsing between.
+HOME_EQUIPMENT = ["bodyweight", "bands"]
+GYM_EQUIPMENT = ["dumbbells", "barbells", "kettlebells", "machines", "cables",
+                 "medicine_ball", "stability_ball"]
 
 DIFFICULTY_CHOICES = [
     ("beginner", "Beginner"),

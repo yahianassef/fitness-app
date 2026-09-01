@@ -117,6 +117,9 @@ for p in PROGRAMS:
             if not ex:
                 raise SystemExit(f"program {p['slug']} references unknown exercise {s['exercise']}")
             equip.add(ex["equipment"])
+            # Store only the slug. Embedding the whole exercise object here cost
+            # 226 KB of pure duplication in a 420 KB bundle; the client rejoins
+            # it against the exercises map at load time.
             slots.append({
                 "id": f"{p['slug']}-{d['day_index']}-{i}",
                 "order_index": i,
@@ -124,7 +127,7 @@ for p in PROGRAMS:
                 "rep_scheme": s["rep_scheme"],
                 "rest_seconds": s["rest_seconds"],
                 "coach_note": s.get("coach_note", ""),
-                "exercise": ex,
+                "exercise_slug": ex["slug"],
             })
         days.append({
             "id": f"{p['slug']}-{d['day_index']}",

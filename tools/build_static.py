@@ -46,6 +46,18 @@ INDEX = """<!DOCTYPE html>
   <link rel="preconnect" href="https://www.youtube-nocookie.com" />
   <link rel="stylesheet" href="{base}/css/styles.css" />
   <script>window.__FC_BASE__ = "{base}";</script>
+  <script>
+    /* Apply the saved theme before first paint. Doing this from a module would
+       flash the wrong theme on every load, which is worse than no toggle. */
+    (function () {{
+      try {{
+        var m = localStorage.getItem('fc_theme');
+        if (m === 'dark' || m === 'light') {{
+          document.documentElement.setAttribute('data-theme', m);
+        }}
+      }} catch (e) {{}}
+    }})();
+  </script>
   <script type="importmap">
   {{
     "imports": {{
@@ -130,26 +142,6 @@ self.addEventListener('fetch', (e) => {{
 """
 
 
-def patch_main(path):
-    """Drop the "Phone" header button.
-
-    It linked to the Django /connect page, which showed a QR code for reaching a
-    laptop-hosted server over the LAN. On Pages there is no such server, and the
-    app itself is the thing you install on the phone, so the button is obsolete.
-    """
-    text = path.read_text(encoding="utf-8")
-    pattern = re.compile(
-        r"^\s*h\('a',\s*\{\s*href:\s*'/connect'.*?\),\n", re.MULTILINE | re.DOTALL,
-    )
-    patched, n = pattern.subn("", text, count=1)
-    if n != 1:
-        raise SystemExit(
-            "build: could not remove the /connect header link from main.js "
-            "(markup changed?) — it would 404 on Pages, so failing loudly."
-        )
-    path.write_text(patched, encoding="utf-8")
-
-
 def patch_login(path):
     """Drop the "Try the demo account" button.
 
@@ -189,7 +181,6 @@ def build():
     for f in OVERLAY.glob("*.js"):
         shutil.copy2(f, DOCS / "js" / f.name)
 
-    patch_main(DOCS / "js" / "main.js")
     patch_login(DOCS / "js" / "pages" / "Login.js")
 
     (DOCS / "data").mkdir(parents=True, exist_ok=True)

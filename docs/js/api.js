@@ -57,9 +57,25 @@ function data() {
     dataPromise = fetch(url).then((r) => {
       if (!r.ok) throw new ApiError('Could not load the exercise library.', r.status, null);
       return r.json();
-    });
+    }).then(hydrate);
   }
   return dataPromise;
+}
+
+// Program slots ship as a slug and are rejoined here, once, against the
+// exercises map. Embedding the full object per slot more than doubled the
+// bundle for no benefit.
+function hydrate(d) {
+  const bySlug = Object.fromEntries(d.exercises.map((e) => [e.slug, e]));
+  d.exerciseBySlug = bySlug;
+  for (const p of d.programs) {
+    for (const day of p.days) {
+      for (const slot of day.slots) {
+        if (slot.exercise_slug && !slot.exercise) slot.exercise = bySlug[slot.exercise_slug];
+      }
+    }
+  }
+  return d;
 }
 
 // --- profile ----------------------------------------------------------------
@@ -113,7 +129,7 @@ function estimated1rm(reps, weight) {
 
 async function hydrateWorkout(w) {
   const d = await data();
-  const bySlug = Object.fromEntries(d.exercises.map((e) => [e.slug, e]));
+  const bySlug = d.exerciseBySlug;   // built once in hydrate(), not per workout
   const prog = w.program_slug ? d.programs.find((p) => p.slug === w.program_slug) : null;
   let dayName = null;
   if (prog && w.program_day != null) {
