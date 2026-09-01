@@ -1,2 +1,1 @@
-web: gunicorn config.wsgi --log-file -
-worker: python manage.py process_tasks
+web: python manage.py migrate --noinput && python manage.py seed && gunicorn config.wsgi --log-file - --bind 0.0.0.0:$PORT

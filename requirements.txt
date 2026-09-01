@@ -4,6 +4,7 @@ djangorestframework==3.15.2
 qrcode==8.0                 # "open on your phone" QR code (pure Python)
 psycopg2-binary==2.9.9      # PostgreSQL adapter for Cloud hosting
 gunicorn==23.0.0            # Production WSGI server
+whitenoise==6.8.2           # Serves static files from gunicorn
 
 # transitive, pinned for reproducibility
 asgiref==3.12.1
