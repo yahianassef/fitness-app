@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#e8632a" />
+  <title>Open Fitness Comeback on your phone</title>
+  <link rel="stylesheet" href="{% static 'web/css/styles.css' %}" />
+  <style>
+    .connect-wrap { max-width: 560px; margin: 0 auto; padding: 1.5rem 1.1rem 4rem; }
+    .qr-card { text-align: center; }
+    .qr-card svg { width: 260px; max-width: 78vw; height: auto; background: #fff;
+      border-radius: var(--radius-sm); padding: 12px; }
+    .url-pill { display: inline-block; font-family: ui-monospace, Menlo, Consolas, monospace;
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px;
+      padding: .5rem 1rem; font-size: 1.05rem; margin-top: .4rem; word-break: break-all; }
+    ol.steps { margin: .5rem 0 0 0; padding-left: 0; list-style: none; counter-reset: s; }
+    ol.steps li { counter-increment: s; position: relative; padding: .55rem 0 .55rem 2.4rem; }
+    ol.steps li::before { content: counter(s); position: absolute; left: 0; top: .5rem;
+      width: 1.7rem; height: 1.7rem; border-radius: 999px; background: var(--accent-soft);
+      color: var(--accent-text); font-weight: 700; display: flex; align-items: center;
+      justify-content: center; font-size: .85rem; }
+  </style>
+</head>
+<body>
+  <div class="connect-wrap stack">
+    <h1>📱 Open it on your iPhone</h1>
+
+    {% if not same_network %}
+    <div class="callout">
+      This computer doesn't seem to be on a network right now, so the address below may be
+      wrong. Connect to Wi‑Fi and reload.
+    </div>
+    {% endif %}
+
+    <div class="card qr-card stack">
+      {{ qr_svg|safe }}
+      <div>
+        <div class="muted small">Your phone and computer must be on the same Wi‑Fi.</div>
+        <div class="url-pill">{{ url }}</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      For your phone to connect, the server must be started with
+      <strong>python serve.py</strong> (or <code>manage.py runserver 0.0.0.0:{{ port }}</code>).
+      Plain <code>runserver</code> only works on this computer.
+    </div>
+
+    <div class="card">
+      <h3>Scan it</h3>
+      <ol class="steps">
+        <li>Open the <strong>Camera</strong> app on your iPhone.</li>
+        <li>Point it at the QR code above.</li>
+        <li>Tap the yellow link banner that appears — Safari opens the app.</li>
+      </ol>
+      <p class="small muted" style="margin-top:.6rem">
+        No camera? Just type <strong>{{ url }}</strong> into Safari's address bar.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Add it to your Home Screen (optional)</h3>
+      <p class="small muted">Makes it open full‑screen with its own icon, just like a real app.</p>
+      <ol class="steps">
+        <li>In Safari, tap the <strong>Share</strong> button (the square with an up arrow).</li>
+        <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
+        <li>Tap <strong>Add</strong>. Look for the “Comeback” icon on your Home Screen.</li>
+      </ol>
+    </div>
+
+    <div class="callout calm">
+      Sign in with the demo account to explore: <strong>demo@fitnesscomeback.app</strong> /
+      <strong>comeback123</strong>
+    </div>
+
+    <p class="center"><a href="/">← Back to the app on this computer</a></p>
+  </div>
+</body>
+</html>
