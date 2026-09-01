@@ -192,3 +192,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CSRF trusted origins for Railway and other production deployments
 _csrf_hosts = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '')
 CSRF_TRUSTED_ORIGINS = [h.strip() for h in _csrf_hosts.split(',') if h.strip()] if _csrf_hosts else []
+
+# Railway (like most PaaS proxies) terminates TLS and forwards plain HTTP, so
+# Django would otherwise report request.scheme as "http" on an HTTPS request.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
