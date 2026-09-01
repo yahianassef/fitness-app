@@ -6,6 +6,7 @@ and writes the page shell, manifest, service worker and SPA fallback.
 
 Run tools/export_static.py first (or just run this — it calls it).
 """
+import hashlib
 import pathlib
 import re
 import shutil
@@ -209,7 +210,19 @@ def build():
     for icon in sorted((DOCS / "icons").glob("*.png")):
         assets.append(f"{BASE}/icons/{icon.name}")
 
-    version = str(abs(hash(tuple(assets))) % 10**8)
+    # Cache-bust on CONTENT, not on the file list.
+    #
+    # The list of filenames is identical on every deploy, so hashing it left the
+    # cache name unchanged; the service worker is cache-first and activate only
+    # evicts caches with a *different* name, so returning users were served stale
+    # JS and CSS forever. Python's hash() is also per-process randomised, which
+    # would churn the cache for no reason. A content digest fixes both.
+    digest = hashlib.sha256()
+    for f in sorted(DOCS.rglob("*")):
+        if f.is_file() and f.name != "sw.js":
+            digest.update(f.relative_to(DOCS).as_posix().encode())
+            digest.update(f.read_bytes())
+    version = digest.hexdigest()[:12]
     (DOCS / "sw.js").write_text(
         SW.format(version=version, base=BASE,
                   assets="[\n  " + ",\n  ".join(f"'{a}'" for a in assets) + ",\n]"),
