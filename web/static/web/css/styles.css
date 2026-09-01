@@ -743,3 +743,226 @@ input:focus, select:focus, textarea:focus {
 @media (max-width: 380px) {
   .card { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 }
+
+/* ============================================================
+   Landing page — the one screen that gets to be loud.
+   ============================================================ */
+.lp { max-width: 1040px; }
+
+/* ---------- hero ---------- */
+.lp-hero {
+  position: relative;
+  margin: -1rem calc(50% - 50vw) 0;
+  padding: clamp(2.6rem, 12vw, 6rem) clamp(1.1rem, 5vw, 2rem) clamp(2.2rem, 8vw, 4rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+.lp-hero-inner { max-width: 760px; margin: 0 auto; text-align: center; position: relative; z-index: 2; }
+
+/* Perspective grid — the "engineered" cue, drawn in CSS so it costs no bytes. */
+.lp-grid {
+  position: absolute; inset: -20% -10% auto -10%; height: 130%; z-index: 0;
+  background-image:
+    linear-gradient(to right, var(--border-strong) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-strong) 1px, transparent 1px);
+  background-size: 46px 46px;
+  transform: perspective(520px) rotateX(58deg) translateY(-12%);
+  transform-origin: 50% 0;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 22%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(70% 60% at 50% 22%, #000 0%, transparent 78%);
+  opacity: .5;
+}
+.lp-orb {
+  position: absolute; z-index: 1; border-radius: 50%; pointer-events: none;
+}
+/* Soft glows are painted as radial gradients rather than blurred layers:
+   filter: blur() on a 420px element is one of the most expensive things a
+   phone GPU can be asked to composite, and the result here is identical. */
+.lp-orb-a {
+  width: 92vw; height: 92vw; max-width: 620px; max-height: 620px;
+  top: -26%; left: -34%;
+  background: radial-gradient(circle closest-side,
+    color-mix(in srgb, var(--accent) 38%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 12%, transparent) 45%,
+    transparent 72%);
+}
+.lp-orb-b {
+  width: 86vw; height: 86vw; max-width: 560px; max-height: 560px;
+  top: -6%; right: -34%;
+  background: radial-gradient(circle closest-side,
+    color-mix(in srgb, var(--electric) 34%, transparent) 0%,
+    color-mix(in srgb, var(--electric) 11%, transparent) 45%,
+    transparent 72%);
+}
+
+.lp-eyebrow {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .42rem .9rem; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  font-size: .78rem; font-weight: 650; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--text-soft);
+}
+.lp-dot {
+  width: 7px; height: 7px; border-radius: 999px; background: var(--good);
+  box-shadow: 0 0 0 0 var(--good);
+  animation: lp-pulse 2.4s var(--ease) infinite;
+}
+@keyframes lp-pulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 60%, transparent); }
+  70%  { box-shadow: 0 0 0 9px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.lp-title {
+  margin: 1.1rem 0 0;
+  font-size: clamp(2.35rem, 10.5vw, 4.6rem);
+  line-height: 1.03;
+  letter-spacing: -.035em;
+  font-weight: 800;
+}
+.lp-grad {
+  background: linear-gradient(100deg, var(--accent) 0%, var(--accent-2) 42%, var(--electric) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  background-size: 220% 100%;
+  animation: lp-shift 9s var(--ease) infinite alternate;
+}
+@keyframes lp-shift { to { background-position: 100% 0; } }
+
+.lp-sub {
+  margin: 1rem auto 0; max-width: 54ch;
+  font-size: clamp(1rem, 2.6vw, 1.16rem);
+  line-height: 1.6; color: var(--text-soft);
+}
+
+.lp-actions {
+  display: flex; flex-wrap: wrap; gap: .7rem;
+  justify-content: center; margin-top: 1.6rem;
+}
+.lp-cta { font-size: 1.05rem; padding-inline: 1.6rem; }
+
+/* ---------- stat strip ---------- */
+.lp-stats {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: .6rem;
+  margin: 2.2rem auto 0; max-width: 620px;
+}
+@media (min-width: 620px) { .lp-stats { grid-template-columns: repeat(4, 1fr); } }
+.lp-stat {
+  padding: .85rem .6rem; border-radius: var(--radius-sm);
+  background: var(--surface-2); border: 1px solid var(--border);
+}
+.lp-stat-n {
+  font-size: 1.7rem; font-weight: 800; letter-spacing: -.035em;
+  font-variant-numeric: tabular-nums;
+  background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.lp-stat-l {
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-soft); font-weight: 650; margin-top: .1rem;
+}
+
+/* ---------- marquee ---------- */
+.lp-marquee {
+  margin: 1.6rem calc(50% - 50vw); padding: .7rem 0;
+  border-block: 1px solid var(--border);
+  background: var(--surface-2);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.lp-track {
+  display: flex; gap: 2rem; width: max-content;
+  animation: lp-scroll 34s linear infinite;
+}
+.lp-track span {
+  font-size: .82rem; font-weight: 650; letter-spacing: .05em;
+  color: var(--text-soft); white-space: nowrap;
+}
+@keyframes lp-scroll { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .lp-track { animation: none; } }
+
+/* ---------- sections ---------- */
+.lp-section { margin-top: 3rem; text-align: center; }
+.lp-kicker {
+  font-size: .74rem; text-transform: uppercase; letter-spacing: .12em;
+  font-weight: 700; color: var(--accent-text);
+}
+.lp-section h2 { margin: .5rem 0 .5rem; }
+.lp-section > .muted { max-width: 52ch; margin: 0 auto; }
+
+/* ---------- ladder ---------- */
+.lp-ladder {
+  display: grid; gap: .5rem; margin: 1.6rem auto 0; max-width: 480px; text-align: left;
+}
+.lp-rung {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .75rem .9rem; border-radius: var(--radius-sm);
+  background: var(--surface-2); border: 1px solid var(--border);
+  opacity: .58;
+  transition: opacity .5s var(--ease), transform .5s var(--ease), border-color .3s var(--ease);
+  transform: translateX(calc(var(--i) * 4px));
+}
+.lp-rung.mine {
+  opacity: 1;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft), 0 14px 34px -14px rgba(244, 83, 28, .6);
+}
+.lp-rung-n {
+  flex: 0 0 auto; width: 28px; height: 28px; border-radius: 999px;
+  display: grid; place-items: center;
+  font-size: .82rem; font-weight: 750;
+  background: var(--surface-3); color: var(--text-soft);
+}
+.lp-rung.mine .lp-rung-n { background: var(--grad); color: #fff; }
+.lp-rung-name { font-weight: 650; flex: 1; }
+.lp-rung-tag {
+  font-size: .7rem; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-soft); font-weight: 650;
+}
+.lp-rung-tag.now { color: var(--accent-text); }
+
+/* ---------- features ---------- */
+.lp-features {
+  display: grid; gap: .8rem; margin-top: 3rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .lp-features { grid-template-columns: 1fr 1fr; } }
+.lp-feature {
+  position: relative; padding: 1.3rem;
+  border-radius: var(--radius);
+  background: var(--surface-2); border: 1px solid var(--border);
+  overflow: hidden;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+}
+.lp-feature::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: var(--grad); transform: scaleX(0); transform-origin: left;
+  transition: transform .5s var(--ease);
+}
+.lp-feature:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); border-color: var(--border-strong); }
+.lp-feature:hover::before { transform: scaleX(1); }
+.lp-ico { font-size: 1.6rem; display: block; margin-bottom: .5rem; }
+.lp-feature h3 { margin: 0 0 .35rem; }
+
+/* ---------- final CTA ---------- */
+.lp-final {
+  margin: 3rem 0 1rem; padding: clamp(1.8rem, 6vw, 3rem) 1.2rem;
+  text-align: center; border-radius: var(--radius);
+  background: var(--surface-2); border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.lp-final::before {
+  content: ""; position: absolute; inset: -60% -20% auto -20%; height: 200%;
+  background: radial-gradient(50% 40% at 50% 0%, var(--accent-soft), transparent 70%);
+  pointer-events: none;
+}
+.lp-final > * { position: relative; }
+.lp-final h2 { margin-bottom: .4rem; }
+
+/* ---------- scroll reveal ---------- */
+/* Visible by default; JS adds .armed only once it can guarantee the reveal. */
+.reveal.armed { opacity: 0; transform: translateY(18px); }
+.reveal { transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal.armed.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal.armed { opacity: 1; transform: none; } }
