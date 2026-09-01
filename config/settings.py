@@ -16,18 +16,31 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 def parse_database_url(url):
-    """Parse DATABASE_URL environment variable into Django DATABASES format."""
+    """Parse DATABASE_URL environment variable into Django DATABASES format.
+
+    Railway/Heroku hand out either postgres:// or postgresql://; both map to the
+    same Django backend. Percent-encoded passwords are unquoted.
+    """
     if not url:
         return None
-    from urllib.parse import urlparse
+    from urllib.parse import unquote, urlparse
+
     parsed = urlparse(url)
+    engines = {
+        'postgres': 'postgresql',
+        'postgresql': 'postgresql',
+        'sqlite': 'sqlite3',
+        'mysql': 'mysql',
+    }
+    engine = engines.get(parsed.scheme, parsed.scheme)
     return {
-        'ENGINE': f'django.db.backends.{parsed.scheme}',
-        'NAME': parsed.path.lstrip('/'),
-        'USER': parsed.username,
-        'PASSWORD': parsed.password,
-        'HOST': parsed.hostname,
+        'ENGINE': f'django.db.backends.{engine}',
+        'NAME': unquote(parsed.path.lstrip('/')),
+        'USER': unquote(parsed.username or ''),
+        'PASSWORD': unquote(parsed.password or ''),
+        'HOST': parsed.hostname or '',
         'PORT': parsed.port or 5432,
+        'CONN_MAX_AGE': 600,
     }
 
 
