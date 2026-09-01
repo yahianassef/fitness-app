@@ -1,5 +1,5 @@
 // Offline cache. Bumping CACHE evicts the previous version on activate.
-const CACHE = 'fitness-comeback-23259706';
+const CACHE = 'fitness-comeback-19350192';
 const BASE = '/fitness-app';
 const ASSETS = [
   '/fitness-app/',
@@ -35,6 +35,7 @@ const ASSETS = [
   '/fitness-app/js/pages/Signup.js',
   '/fitness-app/js/pages/WorkoutDetail.js',
   '/fitness-app/js/router.js',
+  '/fitness-app/js/session.js',
   '/fitness-app/js/store.js',
   '/fitness-app/icons/apple-touch-icon.png',
   '/fitness-app/icons/icon-192.png',

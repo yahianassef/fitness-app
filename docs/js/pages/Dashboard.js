@@ -1,12 +1,14 @@
 import { api } from '../api.js';
 import { store } from '../store.js';
+import { storageStatus, isInstalled } from '../session.js';
 import { RouterLink } from '../router.js';
 import ProgressRing from '../components/ProgressRing.js';
 
 export default {
   components: { RouterLink, ProgressRing },
   data() {
-    return { data: null, loading: true, error: '' };
+    return {
+      storage: null, data: null, loading: true, error: '' };
   },
   async created() {
     try {
@@ -16,6 +18,7 @@ export default {
     } finally {
       this.loading = false;
     }
+    storageStatus().then((s) => { this.storage = { ...s, installed: isInstalled() }; });
   },
   computed: {
     store: () => store,
@@ -153,6 +156,30 @@ export default {
               </router-link>
             </li>
           </ul>
+        </div>
+
+        <div v-if="storage" class="card tight">
+          <h3 style="margin:0 0 .5rem">Your data</h3>
+          <p class="small muted" style="margin:0 0 .6rem">
+            Everything you log lives on this device, so the app needs no account server
+            and no subscription. You stay signed in until you sign out.
+          </p>
+          <div class="storage-note">
+            <span aria-hidden="true">{{ storage.persisted ? '🔒' : '⚠️' }}</span>
+            <span v-if="storage.persisted">
+              Storage is <strong>persistent</strong> — your session and workout log survive
+              closing the app.
+            </span>
+            <span v-else-if="!storage.installed">
+              Storage is not marked persistent yet. <strong>Add the app to your Home Screen</strong>
+              (Share → Add to Home Screen) so iOS keeps your data instead of clearing it after
+              about a week unused.
+            </span>
+            <span v-else>
+              Storage is not marked persistent. Your data is saved, but the browser may clear
+              it if the device runs very low on space.
+            </span>
+          </div>
         </div>
 
         <div class="row" style="justify-content:center">

@@ -1,53 +1,81 @@
 /* ============================================================
-   Fitness Comeback — mobile-first, warm, uncluttered
+   Fitness Comeback — "Nightfall" design system
+   Dark-first, glass surfaces, ember signature, aurora depth.
    ============================================================ */
 :root {
-  --bg: #fbf7f2;
-  --surface: #ffffff;
-  --surface-2: #f4ece2;
-  --border: #e7ddd0;
-  --text: #221d1a;
-  --text-soft: #6b6157;
-  --accent: #f0521d;           /* punchier ember-orange */
-  --accent-2: #ff9012;         /* warm amber, the second gradient stop */
-  --accent-soft: #ffe7d8;
-  --accent-text: #b23c12;
-  --electric: #5b3df5;         /* energetic violet — achievements, streaks */
-  --electric-soft: #eae5ff;
-  --good: #16915b;
-  --good-soft: #daf3e6;
-  --warn: #b3541e;
+  color-scheme: light dark;
+
+  --bg: #f4f5fa;
+  --bg-deep: #e9ebf3;
+  --surface: rgba(255, 255, 255, .74);
+  --surface-solid: #ffffff;
+  --surface-2: rgba(15, 18, 34, .045);
+  --surface-3: rgba(15, 18, 34, .08);
+  --border: rgba(15, 18, 34, .10);
+  --border-strong: rgba(15, 18, 34, .16);
+  --text: #0f1222;
+  --text-soft: #5a6076;
+
+  --accent: #f4531c;           /* ember — the brand signature */
+  --accent-2: #ff9f18;         /* amber, second gradient stop */
+  --accent-soft: rgba(244, 83, 28, .12);
+  --accent-text: #c0390d;
+  --electric: #6d5cff;         /* violet — achievements, streaks */
+  --electric-soft: rgba(109, 92, 255, .12);
+  --cyan: #10b9d6;             /* cool counterpoint for data */
+  --good: #0d9f63;
+  --good-soft: rgba(13, 159, 99, .12);
+  --warn: #c0410f;
+
   --grad: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  --shadow: 0 1px 2px rgba(43, 38, 34, .06), 0 8px 24px rgba(43, 38, 34, .07);
-  --shadow-pop: 0 10px 34px -8px rgba(240, 82, 29, .38);
-  --radius: 18px;
-  --radius-sm: 11px;
+  --grad-cool: linear-gradient(135deg, var(--electric) 0%, var(--cyan) 100%);
+  --glass-blur: saturate(180%) blur(18px);
+
+  --shadow: 0 1px 2px rgba(15, 18, 34, .05), 0 10px 30px -12px rgba(15, 18, 34, .18);
+  --shadow-lift: 0 2px 6px rgba(15, 18, 34, .07), 0 22px 48px -18px rgba(15, 18, 34, .28);
+  --shadow-pop: 0 10px 30px -10px rgba(244, 83, 28, .55);
+  --ring: 0 0 0 3px rgba(244, 83, 28, .35);
+
+  --radius: 20px;
+  --radius-sm: 13px;
   --tap: 46px;
   --maxw: 960px;
   --ease: cubic-bezier(.2, .8, .2, 1);
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, Roboto, Helvetica, Arial, sans-serif;
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", system-ui, Roboto, Helvetica, Arial, sans-serif;
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #15120e;
-    --surface: #211d17;
-    --surface-2: #2b251d;
-    --border: #3a3227;
-    --text: #f4efe6;
-    --text-soft: #b7ac9c;
-    --accent: #ff6a38;
-    --accent-2: #ffab3d;
-    --accent-soft: #3d2214;
-    --accent-text: #ffa576;
-    --electric: #9b8bff;
-    --electric-soft: #241d4a;
-    --good: #4fd08e;
-    --good-soft: #16342450;
-    --warn: #f0a55f;
-    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 12px 34px rgba(0, 0, 0, .4);
-    --shadow-pop: 0 12px 38px -8px rgba(255, 106, 56, .42);
+    --bg: #06070e;
+    --bg-deep: #04050a;
+    --surface: rgba(22, 26, 44, .58);
+    --surface-solid: #12162a;
+    --surface-2: rgba(255, 255, 255, .055);
+    --surface-3: rgba(255, 255, 255, .10);
+    --border: rgba(255, 255, 255, .085);
+    --border-strong: rgba(255, 255, 255, .16);
+    --text: #eef1fb;
+    --text-soft: #9aa2be;
+
+    --accent: #ff6b35;
+    --accent-2: #ffb03a;
+    --accent-soft: rgba(255, 107, 53, .16);
+    --accent-text: #ffa072;
+    --electric: #8b7cff;
+    --electric-soft: rgba(139, 124, 255, .16);
+    --cyan: #35dcf2;
+    --good: #35d89b;
+    --good-soft: rgba(53, 216, 155, .14);
+    --warn: #ff9d5c;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 16px 40px -16px rgba(0, 0, 0, .8);
+    --shadow-lift: 0 2px 8px rgba(0, 0, 0, .5), 0 28px 60px -20px rgba(0, 0, 0, .9);
+    --shadow-pop: 0 12px 36px -10px rgba(255, 107, 53, .5);
+    --ring: 0 0 0 3px rgba(255, 107, 53, .4);
   }
 }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
@@ -433,4 +461,285 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); ou
   position: absolute; right: .5rem; top: 50%; transform: translateY(-50%);
   border: 0; background: transparent; color: inherit; font-size: 1rem; cursor: pointer;
   min-height: 32px; min-width: 32px;
+}
+
+/* ============================================================
+   Nightfall layer — glass, depth, motion.
+   Overrides the base rules above; same class names throughout,
+   so no markup changes were needed.
+   ============================================================ */
+
+/* ---------- aurora backdrop ---------- */
+body {
+  background: var(--bg);
+  position: relative;
+  min-height: 100dvh;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(60ch 60ch at 12% -8%, var(--accent-soft), transparent 60%),
+    radial-gradient(50ch 50ch at 92% 6%, var(--electric-soft), transparent 62%),
+    radial-gradient(70ch 45ch at 50% 108%, var(--accent-soft), transparent 65%);
+  opacity: .9;
+}
+@media (prefers-color-scheme: dark) {
+  body::before { opacity: 1; }
+  body::after {
+    content: "";
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(120ch 80ch at 50% -20%, rgba(109, 92, 255, .10), transparent 70%);
+  }
+}
+
+/* ---------- typography ---------- */
+h1, h2, h3 { letter-spacing: -.022em; line-height: 1.12; font-weight: 750; }
+h1 { font-size: clamp(1.65rem, 5.2vw, 2.35rem); }
+h2 { font-size: clamp(1.3rem, 3.6vw, 1.6rem); }
+h3 { font-size: 1.06rem; letter-spacing: -.014em; }
+.muted { color: var(--text-soft); }
+
+/* ---------- glass surfaces ---------- */
+.card {
+  background: var(--surface);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  position: relative;
+  transition: transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s var(--ease);
+}
+/* Hairline top highlight — the detail that reads as glass rather than grey box. */
+.card::after {
+  content: "";
+  position: absolute; inset: 0 0 auto 0; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--border-strong) 22%, var(--border-strong) 78%, transparent);
+}
+
+.topbar {
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--border);
+}
+.tabbar {
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: .005em;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform .18s var(--ease), box-shadow .24s var(--ease), filter .18s var(--ease);
+}
+/* Sheen sweep on hover — the micro-interaction that makes taps feel physical. */
+.btn::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .30) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform .6s var(--ease);
+}
+.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-pop); }
+.btn:hover::before { transform: translateX(120%); }
+.btn:active { transform: translateY(0) scale(.968); }
+.btn:disabled { filter: grayscale(.4) opacity(.55); transform: none; box-shadow: none; }
+
+.btn.ghost, .btn.soft {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.btn.ghost:hover, .btn.soft:hover {
+  background: var(--surface-3);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+.btn.good {
+  background: linear-gradient(135deg, var(--good), var(--cyan));
+  box-shadow: 0 10px 30px -10px rgba(13, 159, 99, .5);
+}
+
+/* Keyboard focus: visible on every control, never on plain mouse clicks. */
+.btn:focus-visible, .chip:focus-visible, .segmented button:focus-visible,
+.card-link:focus-visible, .video-poster:focus-visible, a:focus-visible,
+.icon-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+/* ---------- inputs ---------- */
+input, select, textarea {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface-solid);
+  box-shadow: var(--ring);
+}
+.field label { letter-spacing: .01em; font-weight: 650; }
+
+/* ---------- interactive rows / cards ---------- */
+.card-link, .pattern-row, .qs-card, .ex-block {
+  transition: transform .24s var(--ease), box-shadow .24s var(--ease),
+              border-color .24s var(--ease), background .24s var(--ease);
+}
+.card-link:hover, .pattern-row:hover, .qs-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--border-strong);
+}
+.card-link:active, .pattern-row:active, .qs-card:active { transform: translateY(-1px) scale(.995); }
+
+/* ---------- segmented control ---------- */
+.segmented {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.segmented button {
+  border-radius: 999px;
+  transition: color .22s var(--ease), background .22s var(--ease), transform .16s var(--ease);
+}
+.segmented button.on {
+  background: var(--grad);
+  color: #fff;
+  box-shadow: 0 6px 18px -8px rgba(244, 83, 28, .7);
+}
+.segmented button:active { transform: scale(.96); }
+
+/* ---------- chips ---------- */
+.chip {
+  border-radius: 999px;
+  transition: background .2s var(--ease), border-color .2s var(--ease), transform .16s var(--ease);
+}
+.chip:active { transform: scale(.95); }
+.chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-text); }
+
+/* ---------- video ---------- */
+.video-wrap {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #05060c;
+  box-shadow: var(--shadow);
+}
+.video-poster {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .55rem; padding: 1rem; text-align: center;
+  width: 100%; border: 0; cursor: pointer; color: #fff;
+  background: linear-gradient(135deg, #24160f, #0a0b12);
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.video-thumb {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 0;
+  filter: brightness(.52) saturate(1.05);
+  transition: transform .5s var(--ease), filter .3s var(--ease);
+}
+.video-poster > :not(.video-thumb) {
+  position: relative; z-index: 1;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .7);
+}
+.video-poster:hover .video-thumb { transform: scale(1.045); filter: brightness(.62) saturate(1.1); }
+.video-poster .play {
+  width: 66px; height: 66px; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; padding-left: 4px;
+  background: var(--grad); color: #fff;
+  box-shadow: 0 10px 30px -6px rgba(244, 83, 28, .75);
+  transition: transform .28s var(--ease-spring), box-shadow .28s var(--ease);
+}
+.video-poster:hover .play { transform: scale(1.09); }
+.video-poster:active .play { transform: scale(.94); }
+.video-poster .muted-play {
+  background: var(--surface-3); box-shadow: none; font-size: 1.4rem; padding-left: 0;
+}
+.video-poster.offline { cursor: default; background: linear-gradient(135deg, #16182a, #0a0b12); }
+
+.video-loading {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .6rem; padding: 1rem; text-align: center;
+  color: #fff; background: rgba(6, 7, 14, .82);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.vid-spinner {
+  width: 34px; height: 34px; border-radius: 999px;
+  border: 3px solid rgba(255, 255, 255, .18);
+  border-top-color: var(--accent);
+  animation: fc-spin .8s linear infinite;
+}
+@keyframes fc-spin { to { transform: rotate(360deg); } }
+
+/* ---------- progress ring, meters, stats ---------- */
+.ring .track { stroke: var(--surface-3); }
+.stat .n { letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.meter { background: var(--surface-3); border-radius: 999px; overflow: hidden; }
+.meter > span { background: var(--grad); border-radius: 999px; }
+
+/* ---------- ladder ---------- */
+.ladder li.here .rung-n {
+  box-shadow: 0 0 0 4px var(--accent-soft), 0 8px 22px -8px rgba(244, 83, 28, .6);
+}
+
+/* ---------- page transition ---------- */
+.page { animation: fc-page-in .42s var(--ease) both; }
+@keyframes fc-page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- celebration ---------- */
+.celebrate {
+  background: rgba(4, 5, 10, .72);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.celebrate .cel-card {
+  background: var(--surface);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lift);
+  animation: fc-pop .5s var(--ease-spring) both;
+}
+@keyframes fc-pop {
+  from { opacity: 0; transform: scale(.9) translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- storage notice ---------- */
+.storage-note {
+  display: flex; align-items: flex-start; gap: .6rem;
+  padding: .8rem .9rem; border-radius: var(--radius-sm);
+  background: var(--electric-soft); border: 1px solid var(--border);
+  font-size: .86rem; color: var(--text-soft);
+}
+
+/* ---------- scrollbars ---------- */
+.qs-scroll { scrollbar-width: none; }
+.qs-scroll::-webkit-scrollbar { display: none; }
+
+/* Glass costs GPU on long lists; ease the blur on the smallest screens. */
+@media (max-width: 380px) {
+  .card { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 }

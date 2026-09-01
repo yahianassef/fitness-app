@@ -1,12 +1,14 @@
 // Global reactive state: the signed-in user + a tiny toast queue.
 import { reactive } from 'vue';
 import { api, getToken, setToken } from './api.js';
+import { requestPersistence } from './session.js';
 
 export const store = reactive({
   user: null,
   ready: false,        // finished the initial "am I logged in?" check
   toast: '',
   celebration: null,   // { emoji, title, subtitle, stats:[{n,l}], cta, to }
+  persistence: 'unknown',  // granted | denied | unsupported
 
   get isAuthed() { return !!this.user; },
   get needsOnboarding() { return !!this.user && !this.user.profile.onboarded; },
@@ -18,8 +20,12 @@ export const store = reactive({
     if (getToken()) {
       try {
         this.user = await api.get('/auth/me/');
+        // Already signed in from a previous session — keep the storage grant alive.
+        requestPersistence().then((s) => { this.persistence = s; });
       } catch {
-        setToken('');
+        // Only drop the session if the profile is genuinely gone, never on a
+        // transient read error, or a reload would silently sign the user out.
+        if (!localStorage.getItem('fc_profile')) setToken('');
       }
     }
     this.ready = true;
@@ -29,17 +35,28 @@ export const store = reactive({
     const data = await api.post('/auth/signup/', payload);
     setToken(data.token);
     this.user = data.user;
+    this.persistence = await requestPersistence();
   },
 
   async login(payload) {
     const data = await api.post('/auth/login/', payload);
     setToken(data.token);
     this.user = data.user;
+    this.persistence = await requestPersistence();
   },
 
-  logout() {
+  // Signing out clears the session but deliberately keeps the workout log, so
+  // signing back in on this device restores it. `forget` wipes everything.
+  logout({ forget = false } = {}) {
     setToken('');
     this.user = null;
+    if (forget) {
+      try {
+        localStorage.removeItem('fc_profile');
+        localStorage.removeItem('fc_workouts');
+        localStorage.removeItem('fc_seq');
+      } catch { /* ignore */ }
+    }
   },
 
   async refreshUser() {
