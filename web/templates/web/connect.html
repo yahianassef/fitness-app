@@ -27,7 +27,7 @@
   <div class="connect-wrap stack">
     <h1>📱 Open it on your iPhone</h1>
 
-    {% if not same_network %}
+    {% if not hosted and not same_network %}
     <div class="callout">
       This computer doesn't seem to be on a network right now, so the address below may be
       wrong. Connect to Wi‑Fi and reload.
@@ -37,16 +37,27 @@
     <div class="card qr-card stack">
       {{ qr_svg|safe }}
       <div>
-        <div class="muted small">Your phone and computer must be on the same Wi‑Fi.</div>
+        {% if hosted %}
+          <div class="muted small">Works on any network — Wi‑Fi or cellular.</div>
+        {% else %}
+          <div class="muted small">Your phone and computer must be on the same Wi‑Fi.</div>
+        {% endif %}
         <div class="url-pill">{{ url }}</div>
       </div>
     </div>
 
+    {% if hosted %}
+    <div class="callout calm">
+      This app is hosted online, so it works from anywhere — your computer does not
+      need to be on.
+    </div>
+    {% else %}
     <div class="callout">
       For your phone to connect, the server must be started with
       <strong>python serve.py</strong> (or <code>manage.py runserver 0.0.0.0:{{ port }}</code>).
       Plain <code>runserver</code> only works on this computer.
     </div>
+    {% endif %}
 
     <div class="card">
       <h3>Scan it</h3>
@@ -70,12 +81,14 @@
       </ol>
     </div>
 
+    {% if not hosted %}
     <div class="callout calm">
       Sign in with the demo account to explore: <strong>demo@fitnesscomeback.app</strong> /
       <strong>comeback123</strong>
     </div>
+    {% endif %}
 
-    <p class="center"><a href="/">← Back to the app on this computer</a></p>
+    <p class="center"><a href="/">← Back to the app</a></p>
   </div>
 </body>
 </html>

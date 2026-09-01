@@ -31,16 +31,37 @@ def _qr_svg(data):
     return buf.getvalue().decode()
 
 
+def _is_local_host(host):
+    """True when the app is being served off this machine / the LAN, not the internet."""
+    name = host.split(":")[0].lower()
+    if name in ("localhost", "127.0.0.1", "0.0.0.0", "[::1]"):
+        return True
+    # Private IPv4 ranges used by home routers.
+    return name.startswith(("10.", "192.168.", "172.16.", "172.17.", "172.18.",
+                            "172.19.", "172.2", "172.30.", "172.31."))
+
+
 def connect(request):
-    """A phone-friendly landing page with a QR code to open the app on iOS/Android."""
-    port = request.get_port() or "8000"
-    host_ip = lan_ip()
-    url = f"http://{host_ip}:{port}/"
-    same_network = host_ip != "127.0.0.1"
+    """A phone-friendly landing page with a QR code to open the app on iOS/Android.
+
+    When the app is deployed, the phone reaches it over the internet, so the QR
+    must point at the public URL. Falling back to the machine's LAN IP is only
+    correct for local development — on a host like Railway that IP is a private
+    container address the phone can never reach.
+    """
+    host = request.get_host()
+    hosted = not _is_local_host(host)
+
+    if hosted:
+        url = f"{request.scheme}://{host}/"
+    else:
+        host_ip = lan_ip()
+        url = f"http://{host_ip}:{request.get_port() or '8000'}/"
+
     return render(request, "web/connect.html", {
         "url": url,
-        "host_ip": host_ip,
-        "port": port,
+        "hosted": hosted,
+        "port": request.get_port() or "8000",
         "qr_svg": _qr_svg(url),
-        "same_network": same_network,
+        "same_network": hosted or lan_ip() != "127.0.0.1",
     })
